@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Payment from "./payment";
+import { Machine } from 'xstate';
+const stateMachine = Machine({
+  initial: 'idle',
+  states: {
+    idle: {
+      on: {
+        SUBMIT: 'loading',
+      }
+    },
+    loading: {
+      on: {
+        PAYMENT_RECEIVED: 'success',
+        PAYMENT_FAILED: 'error',
+      }
+    },
+    error: {
+      on: {
+        SUBMIT: 'loading',
+      }
+    },
+    success: {
+      type: 'final',
+    }
+  }
+});
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Payment />
     </div>
-  );
+  )
 }
 
 export default App;
